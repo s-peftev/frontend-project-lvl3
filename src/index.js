@@ -1,5 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles.css';
-
 import 'bootstrap';
-import _ from 'lodash';
+
+import app from './app.js';
+
+app();
