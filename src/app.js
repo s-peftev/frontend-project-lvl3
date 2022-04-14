@@ -1,6 +1,7 @@
 import onChange from 'on-change';
 import * as yup from 'yup';
 import render from './view.js';
+import RSSParser from './RSSParser.js';
 
 yup.setLocale({
   mixed: {
@@ -37,6 +38,8 @@ export default (i18next) => {
       feedbackMessage: '',
       addedURLs: [],
     },
+    feeds: [],
+    posts: [],
   }, render(elements));
 
   elements.rssAddForm.addEventListener('submit', (e) => {
@@ -53,9 +56,6 @@ export default (i18next) => {
         fetch(`https://allorigins.hexlet.app/get?url=${encodeURIComponent(urlInput.url)}`)
           .then((response) => {
             if (response.ok) {
-              state.rssAddForm.state = 'filling';
-              state.rssAddForm.feedbackMessage = i18next.t('feedback.success');
-              state.rssAddForm.addedURLs.push(urlInput.url);
               return response.json();
             }
             state.rssAddForm.state = 'error';
@@ -63,9 +63,22 @@ export default (i18next) => {
             throw new Error('Network response was not ok.');
           })
           .then((data) => {
-            const domParser = new DOMParser();
-            const parsed = domParser.parseFromString(JSON.stringify(data), 'text/html');
-            console.log(parsed.body.querySelector('title'));
+            const parser = new RSSParser(data);
+            try {
+              const { feed, posts } = parser.parse().getParsedRSS();
+              state.feeds.push(feed);
+              console.log(posts);
+            } catch (err) {
+              state.rssAddForm.state = 'error';
+              state.rssAddForm.feedbackMessage = i18next.t('feedback.invalid_rss');
+              throw new Error('Invalid RSS link.');
+            }
+            // console.log(data);
+          })
+          .then(() => {
+            state.rssAddForm.state = 'filling';
+            state.rssAddForm.feedbackMessage = i18next.t('feedback.success');
+            state.rssAddForm.addedURLs.push(urlInput.url);
           });
       })
       .catch((err) => {
