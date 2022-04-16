@@ -40,7 +40,7 @@ export default (i18next) => {
     },
     feeds: [],
     posts: [],
-  }, render(elements));
+  }, render(elements, i18next));
 
   elements.rssAddForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -67,10 +67,11 @@ export default (i18next) => {
             try {
               const { feed, posts } = parser.parse().getParsedRSS();
               state.feeds.push(feed);
-              console.log(posts);
+              state.posts.push(...posts);
+              console.log(state);
             } catch (err) {
               state.rssAddForm.state = 'error';
-              state.rssAddForm.feedbackMessage = i18next.t('feedback.invalid_rss');
+              state.rssAddForm.feedbackMessage = i18next.t('feedback.invalid_rss');/*  */
               throw new Error('Invalid RSS link.');
             }
             // console.log(data);

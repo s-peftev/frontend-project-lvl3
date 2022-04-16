@@ -7,5 +7,8 @@ export default {
       invalid_rss: 'Can`t read data from this link. Try another link.',
       success: 'New RSS was successfully added!',
     },
+    feeds_card_title: 'Feeds',
+    posts_card_title: 'Posts',
+    view_button: 'View',
   },
 };

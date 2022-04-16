@@ -31,7 +31,7 @@ class RSSParser {
     const posts = [...postElements].map((post) => {
       const postTitle = post.querySelector('title').textContent.trim();
       const postDescription = post.querySelector('description').textContent.trim();
-      const postLink = post.querySelector('link').nextSibling.textContent.replace(/(\r\n|\n|\r)/gm, '');
+      const postLink = post.querySelector('link').nextSibling.textContent.trim().replace('\\n', '');
       return {
         id: _.uniqueId('post_'), title: postTitle, description: postDescription, link: postLink, feedID: feed.id,
       };
