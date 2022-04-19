@@ -63,7 +63,7 @@ export default (i18next) => {
             throw new Error('Network response was not ok.');
           })
           .then((data) => {
-            const parser = new RSSParser(data);
+            const parser = new RSSParser(JSON.stringify(data));
             try {
               const { feed, posts } = parser.parse().getParsedRSS();
               state.feeds.push(feed);

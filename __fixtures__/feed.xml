@@ -1,0 +1,53 @@
+<rss version="2.0">
+<channel>
+<title><![CDATA[Deutsche Welle: DW.COM News]]></title>
+<link>
+https://www.dw.com/s-2207?maca=rus-rss-ru-news-4383-xml-mrss
+</link>
+<description>Deutsche Welle: DW.COM News</description>
+<language>ru</language>
+<copyright>2022 DW.COM, Deutsche Welle</copyright>
+<pubDate>Tue, 19 Apr 2022 08:52:32 GMT</pubDate>
+<lastBuildDate>Tue, 19 Apr 2022 08:52:32 GMT</lastBuildDate>
+<atom:link href="https://rss.dw.com/xml/rss-ru-news" rel="self"/>
+<image>
+<url>https://rss.dw.com/images/DW-L-RGB_whitebg.png</url>
+<title>Deutsche Welle: DW.COM News</title>
+<link>
+https://www.dw.com/s-2207?maca=rus-rss-ru-news-4383-xml-mrss
+</link>
+<description>
+News, Analysis and Service from Germany and Europe - in 30 Languages
+</description>
+<width>98</width>
+<height>64</height>
+</image>
+<ttl>10</ttl>
+<item>
+<guid isPermaLink="false">61509255</guid>
+<pubDate>Tue, 19 Apr 2022 08:16:00 GMT</pubDate>
+<title>У школы в Кабуле прогремели минимум три взрыва</title>
+<link>
+https://www.dw.com/ru/у-школы-в-кабуле-прогремели-минимум-три-взрыва/a-61509255?maca=rus-rss-ru-news-4383-xml-mrss
+</link>
+<description>
+У школы в западном районе Кабула, где проживают шииты, произошли три взрыва, среди учеников есть раненые.
+</description>
+<category>Новости</category>
+</item>
+<item>
+<guid isPermaLink="false">61507240</guid>
+<pubDate>Tue, 19 Apr 2022 06:46:00 GMT</pubDate>
+<title>
+Вице-премьер Украины: Гуманитарных коридоров не будет третий день подряд
+</title>
+<link>
+https://www.dw.com/ru/вице-премьер-украины-гуманитарных-коридоров-не-будет-третий-день-подряд/a-61507240?maca=rus-rss-ru-news-4383-xml-mrss
+</link>
+<description>
+Россия продолжает военное вторжение в Украину, начатое 24 февраля по приказу Владимира Путина. DW следит за событиями 19 апреля.
+</description>
+<category>Новости</category>
+</item>
+</channel>
+</rss>
