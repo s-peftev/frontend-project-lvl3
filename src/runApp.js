@@ -4,13 +4,15 @@ import app from './app.js';
 
 export default () => {
   const i18nextInstance = i18next.createInstance();
-  i18nextInstance.init({
-    lng: 'en',
-    debug: true,
-    resources: {
-      en,
-    },
-  }).then(() => {
-    app(i18nextInstance);
-  });
+  i18nextInstance
+    .init({
+      lng: 'en',
+      debug: true,
+      resources: {
+        en,
+      },
+    })
+    .then(() => {
+      app(i18nextInstance);
+    });
 };

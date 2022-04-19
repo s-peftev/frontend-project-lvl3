@@ -31,16 +31,19 @@ export default (i18next) => {
     feedbackContainer: document.querySelector('.feedback'),
   };
 
-  const state = onChange({
-    rssAddForm: {
-      state: 'filling',
-      isValid: true,
-      feedbackMessage: '',
-      addedURLs: [],
+  const state = onChange(
+    {
+      rssAddForm: {
+        state: 'filling',
+        isValid: true,
+        feedbackMessage: '',
+        addedURLs: [],
+      },
+      feeds: [],
+      posts: [],
     },
-    feeds: [],
-    posts: [],
-  }, render(elements, i18next));
+    render(elements, i18next),
+  );
 
   elements.rssAddForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -53,13 +56,19 @@ export default (i18next) => {
         state.rssAddForm.isValid = true;
         state.rssAddForm.state = 'responsing';
 
-        fetch(`https://allorigins.hexlet.app/get?url=${encodeURIComponent(urlInput.url)}`)
+        fetch(
+          `https://allorigins.hexlet.app/get?url=${encodeURIComponent(
+            urlInput.url,
+          )}`,
+        )
           .then((response) => {
             if (response.ok) {
               return response.json();
             }
             state.rssAddForm.state = 'error';
-            state.rssAddForm.feedbackMessage = i18next.t('feedback.default_error');
+            state.rssAddForm.feedbackMessage = i18next.t(
+              'feedback.default_error',
+            );
             throw new Error('Network response was not ok.');
           })
           .then((data) => {
@@ -71,7 +80,9 @@ export default (i18next) => {
               console.log(state);
             } catch (err) {
               state.rssAddForm.state = 'error';
-              state.rssAddForm.feedbackMessage = i18next.t('feedback.invalid_rss');/*  */
+              state.rssAddForm.feedbackMessage = i18next.t(
+                'feedback.invalid_rss',
+              ); /*  */
               throw new Error('Invalid RSS link.');
             }
             // console.log(data);
@@ -84,7 +95,9 @@ export default (i18next) => {
       })
       .catch((err) => {
         const [errorMessage] = err.errors;
-        state.rssAddForm.feedbackMessage = i18next.t(`feedback.${errorMessage.key}`);
+        state.rssAddForm.feedbackMessage = i18next.t(
+          `feedback.${errorMessage.key}`,
+        );
         state.rssAddForm.isValid = false;
       });
   });

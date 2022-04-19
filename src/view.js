@@ -5,7 +5,9 @@ const feedsRender = (elements, feeds, i18next) => {
     feedsCard.classList.add('card', 'border-0');
     const feedsCardBody = document.createElement('div');
     feedsCardBody.classList.add('card-body');
-    feedsCardBody.innerHTML = `<h2 class="card-title h4">${i18next.t('feeds_card_title')}</h2>`;
+    feedsCardBody.innerHTML = `<h2 class="card-title h4">${i18next.t(
+      'feeds_card_title',
+    )}</h2>`;
     feedsCard.append(feedsCardBody);
     const feedsList = document.createElement('ul');
     feedsList.classList.add('list-group', 'border-0', 'rounded-0');
@@ -34,13 +36,22 @@ const postsRender = (elements, posts, i18next) => {
     postsCard.classList.add('card', 'border-0');
     const postsCardBody = document.createElement('div');
     postsCardBody.classList.add('card-body');
-    postsCardBody.innerHTML = `<h2 class="card-title h4">${i18next.t('posts_card_title')}</h2>`;
+    postsCardBody.innerHTML = `<h2 class="card-title h4">${i18next.t(
+      'posts_card_title',
+    )}</h2>`;
     postsCard.append(postsCardBody);
     const postsList = document.createElement('ul');
     postsList.classList.add('list-group', 'border-0', 'rounded-0');
     const postItems = posts.map((post) => {
       const li = document.createElement('li');
-      li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'alidn-item-start', 'border-0', 'border-end-0');
+      li.classList.add(
+        'list-group-item',
+        'd-flex',
+        'justify-content-between',
+        'alidn-item-start',
+        'border-0',
+        'border-end-0',
+      );
       const title = document.createElement('a');
       title.setAttribute('href', post.link);
       title.setAttribute('data-id', post.id);
