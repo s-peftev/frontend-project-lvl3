@@ -22,15 +22,6 @@ const getValidator = (addedURLs) => {
   return schema;
 };
 
-const tracking = (func, param, period) => {
-	const result = func(param);
-	if (result) {
-		console.log(result);
-		setTimeout(() => {tracking(func, param, period)}, period);
-		return;
-	}
-};
-
 export default (i18next) => {
   const elements = {
     rssAddForm: document.querySelector('form'),
@@ -51,11 +42,14 @@ export default (i18next) => {
       },
       feeds: [],
       posts: [],
+      trackerUpdateFrequency: 5000,
     },
     render(elements, i18next),
   );
-  
-  trackRSS(state, 10000);
+
+  setTimeout(() => {
+    trackRSS(state, state.trackerUpdateFrequency);
+  }, state.trackerUpdateFrequency);
 
   elements.rssAddForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -71,7 +65,9 @@ export default (i18next) => {
         fetch(
           `https://allorigins.hexlet.app/get?url=${encodeURIComponent(
             urlInput.url,
-          )}`, {cache: "no-store"})
+          )}`,
+          { cache: 'no-store' },
+        )
           .then((response) => {
             if (response.ok) {
               return response.text();
@@ -83,16 +79,16 @@ export default (i18next) => {
             throw new Error('Network response was not ok.');
           })
           .then((data) => {
-			  // console.log(data);
+            // console.log(data);
             const parser = new RSSParser(data);
             try {
               const { feed, posts } = parser.parse().getParsedRSS();
               state.feeds.push({ ...feed, url: urlInput.url });
               state.posts.push(...posts);
-			  state.rssAddForm.state = 'filling';
-			  state.rssAddForm.feedbackMessage = i18next.t('feedback.success');
+              state.rssAddForm.state = 'filling';
+              state.rssAddForm.feedbackMessage = i18next.t('feedback.success');
               state.rssAddForm.addedURLs.push(urlInput.url);
-               console.log(state);
+              console.log(state);
             } catch (err) {
               state.rssAddForm.state = 'error';
               state.rssAddForm.feedbackMessage = i18next.t(
@@ -100,7 +96,7 @@ export default (i18next) => {
               );
               throw new Error('Invalid RSS link.');
             }
-          })
+          });
       })
       .catch((err) => {
         const [errorMessage] = err.errors;
