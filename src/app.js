@@ -10,13 +10,14 @@ yup.setLocale({
     notOneOf: () => ({ key: 'existing_rss' }),
   },
   string: {
+    required: () => ({ key: 'empty_url' }),
     url: () => ({ key: 'invalid_url' }),
   },
 });
 
 const getValidator = (addedURLs) => {
   const schema = yup.object().shape({
-    url: yup.string().url().notOneOf(addedURLs),
+    url: yup.string().required().url().notOneOf(addedURLs),
   });
 
   return schema;
@@ -30,6 +31,7 @@ export default (i18next) => {
     postsContainer: document.querySelector('.posts'),
     feedsContainer: document.querySelector('.feeds'),
     feedbackContainer: document.querySelector('.feedback'),
+    modal: document.querySelector('#modal'),
   };
 
   const state = onChange(
@@ -40,16 +42,27 @@ export default (i18next) => {
         feedbackMessage: '',
         addedURLs: [],
       },
+      modal: {
+        postID: '',
+      },
       feeds: [],
       posts: [],
+      seenPostsID: [],
       trackerUpdateFrequency: 5000,
     },
-    render(elements, i18next),
+    (onChangePath, onChangeValue) => render(elements, state, i18next, onChangePath, onChangeValue),
   );
 
   setTimeout(() => {
     trackRSS(state, state.trackerUpdateFrequency);
   }, state.trackerUpdateFrequency);
+
+  elements.postsContainer.addEventListener('click', (e) => {
+    if (!('id' in e.target.dataset)) return;
+    const { id: postID } = e.target.dataset;
+    state.seenPostsID.push(postID);
+    state.modal.postID = postID;
+  });
 
   elements.rssAddForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -74,8 +87,9 @@ export default (i18next) => {
             }
             state.rssAddForm.state = 'error';
             state.rssAddForm.feedbackMessage = i18next.t(
-              'feedback.default_error',
+              'feedback.network_error',
             );
+            console.log(i18next.t('feedback.network_error'));
             throw new Error('Network response was not ok.');
           })
           .then((data) => {
@@ -88,12 +102,13 @@ export default (i18next) => {
               state.rssAddForm.state = 'filling';
               state.rssAddForm.feedbackMessage = i18next.t('feedback.success');
               state.rssAddForm.addedURLs.push(urlInput.url);
-              console.log(state);
+              // console.log(state);
             } catch (err) {
               state.rssAddForm.state = 'error';
               state.rssAddForm.feedbackMessage = i18next.t(
                 'feedback.invalid_rss',
               );
+              console.log(i18next.t('feedback.invalid_rss'));
               throw new Error('Invalid RSS link.');
             }
           });
@@ -104,6 +119,7 @@ export default (i18next) => {
           `feedback.${errorMessage.key}`,
         );
         state.rssAddForm.isValid = false;
+        console.log(i18next.t(`feedback.${errorMessage.key}`));
       });
   });
 };

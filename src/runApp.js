@@ -1,15 +1,15 @@
 import i18next from 'i18next';
-import en from './locales/en.js';
+import ru from './locales/ru.js';
 import app from './app.js';
 
 export default () => {
   const i18nextInstance = i18next.createInstance();
   i18nextInstance
     .init({
-      lng: 'en',
-      debug: true,
+      lng: 'ru',
+      debug: false,
       resources: {
-        en,
+        ru,
       },
     })
     .then(() => {

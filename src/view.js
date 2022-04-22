@@ -1,3 +1,5 @@
+const isViewedPost = (post, state) => state.seenPostsID.includes(post.id);
+
 const feedsRender = (elements, feeds, i18next) => {
   elements.feedsContainer.replaceChildren('');
   if (feeds.length > 0) {
@@ -29,7 +31,7 @@ const feedsRender = (elements, feeds, i18next) => {
   }
 };
 
-const postsRender = (elements, posts, i18next) => {
+const postsRender = (elements, posts, i18next, state) => {
   elements.postsContainer.replaceChildren('');
   if (posts.length > 0) {
     const postsCard = document.createElement('div');
@@ -53,6 +55,10 @@ const postsRender = (elements, posts, i18next) => {
         'border-end-0',
       );
       const title = document.createElement('a');
+      const titleClasses = isViewedPost(post, state)
+        ? ['fw-normal', 'link-secondary']
+        : ['fw-bold'];
+      title.classList.add(...titleClasses);
       title.setAttribute('href', post.link);
       title.setAttribute('data-id', post.id);
       title.setAttribute('target', '_blank');
@@ -102,22 +108,51 @@ const rssAddFormStateHandler = (elements, state) => {
   }
 };
 
-export default (elements, i18next) => (path, value) => {
-  switch (path) {
+const modalRender = (elements, postID, state) => {
+  const relatedPost = state.posts.find((post) => post.id === postID);
+  const modalTitle = elements.modal.querySelector('.modal-title');
+  const modalBody = elements.modal.querySelector('.modal-body');
+  const fullArticleLink = elements.modal.querySelector('.full-article');
+
+  modalTitle.textContent = relatedPost.title;
+  modalBody.textContent = relatedPost.description;
+  fullArticleLink.setAttribute('href', relatedPost.link);
+};
+
+const seenPostsRender = (elements, seenPostsID) => {
+  seenPostsID.forEach((seenPostID) => {
+    const seenPostTitle = elements.postsContainer.querySelector(
+      `a[data-id="${seenPostID}"]`,
+    );
+    if (seenPostTitle.classList.contains('fw-bold')) {
+      seenPostTitle.classList.remove('fw-bold');
+      seenPostTitle.classList.add('fw-normal', 'link-secondary');
+    }
+  });
+};
+
+export default (elements, state, i18next, onChangePath, onChangeValue) => {
+  switch (onChangePath) {
     case 'rssAddForm.isValid':
-      inputValidationHandler(elements, value);
+      inputValidationHandler(elements, onChangeValue);
       break;
     case 'rssAddForm.feedbackMessage':
-      elements.feedbackContainer.replaceChildren(value);
+      elements.feedbackContainer.replaceChildren(onChangeValue);
       break;
     case 'rssAddForm.state':
-      rssAddFormStateHandler(elements, value);
+      rssAddFormStateHandler(elements, onChangeValue);
       break;
     case 'feeds':
-      feedsRender(elements, value, i18next);
+      feedsRender(elements, onChangeValue, i18next);
       break;
     case 'posts':
-      postsRender(elements, value, i18next);
+      postsRender(elements, onChangeValue, i18next, state);
+      break;
+    case 'seenPostsID':
+      seenPostsRender(elements, onChangeValue);
+      break;
+    case 'modal.postID':
+      modalRender(elements, onChangeValue, state);
       break;
     default:
       break;
