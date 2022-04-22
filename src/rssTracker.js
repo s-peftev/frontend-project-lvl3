@@ -44,7 +44,7 @@ const getNewRSSPosts = (state) => {
       const savedPosts = state.posts;
       const fetchedPosts = parsedPosts.flat();
       const newPosts = _.differenceBy(fetchedPosts, savedPosts, 'link');
-      state.posts.push(...newPosts);
+      state.posts.unshift(...newPosts);
     });
 };
 
